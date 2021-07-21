@@ -5,6 +5,7 @@ import {Switch, Route} from 'react-router-dom'
 import Homepage from './pages/homepage/Homepage';
 import ShopPage from './pages/shop/shop';
 import Header from './components/header/Header';
+import SiginInAndSignUpPage from './pages/signin-signup/signin-signup';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
       <Switch>
         <Route exact path='/' component={Homepage}/>
         <Route  path='/shop' component={ShopPage}/>
-
+        <Route path='/signin' component={SiginInAndSignUpPage}/>
       </Switch>
     </div>
   );
