@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from "firebase/firestore"; 
 
 
 const firebaseConfig = {
@@ -11,6 +12,7 @@ const firebaseConfig = {
     messagingSenderId: "952082150666",
     appId: "1:952082150666:web:ceeea314e87d7794d3f6f3"
   };
+
 
   const app = initializeApp(firebaseConfig);
   export const auth = getAuth(app)
@@ -23,8 +25,32 @@ const firebaseConfig = {
 
   export const signInWithGoogle = ()=> signInWithPopup(auth, provider)
   .then ((response)=> {
-      console.log('user logged in')
   })
   .catch ((error)=> {
       console.log(error)
   })
+
+  export const createUserProfileDocument = async (userAuth, additionalData)=> {
+    if (!userAuth) return;
+
+    const docRef = doc(database, "users", userAuth.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      
+    } else {
+      const {displayName, email, uid } = userAuth
+      const createdAt = new Date()
+      try {
+        await setDoc(doc(database, "users", uid), {
+          displayName,
+          email,
+          createdAt,
+          ...additionalData
+        });
+      } catch (err) {
+        console.log('error creating user', err.message)
+      }
+    }
+    return docSnap
+
+  }
